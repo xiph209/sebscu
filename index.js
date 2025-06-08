@@ -11,9 +11,12 @@ app.get('/scrape', async (req, res) => {
     const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto('https://oportunitati-ue.gov.ro/apeluri/?_sf_s=cercetare', {
-      waitUntil: 'networkidle',
-      timeout: 60000
+    waitUntil: 'domcontentloaded',
+    timeout: 60000
     });
+
+	await page.waitForSelector('.lista-apeluri > .item', { timeout: 10000 });
+
 
     const data = await page.evaluate(() => {
       const results = [];
