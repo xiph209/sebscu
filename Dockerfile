@@ -1,9 +1,4 @@
-FROM node:18-slim
-
-RUN apt-get update && apt-get install -y \
-    wget ca-certificates chromium \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+FROM mcr.microsoft.com/playwright:focal
 
 WORKDIR /usr/src/app
 COPY package*.json ./

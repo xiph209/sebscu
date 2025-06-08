@@ -1,5 +1,5 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright');
 const cors = require('cors');
 
 const app = express();
@@ -8,15 +8,10 @@ const PORT = process.env.PORT || 3000;
 
 app.get('/scrape', async (req, res) => {
   try {
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: '/usr/bin/chromium',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-
+    const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto('https://oportunitati-ue.gov.ro/apeluri/?_sf_s=cercetare', {
-      waitUntil: 'networkidle2',
+      waitUntil: 'networkidle',
       timeout: 60000
     });
 
@@ -44,5 +39,5 @@ app.get('/scrape', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Scraper running at http://localhost:${PORT}/scrape`);
+  console.log(`🚀 Playwright scraper running at http://localhost:${PORT}/scrape`);
 });
